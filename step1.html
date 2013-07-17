@@ -1,23 +1,62 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Group 2 Search</title>
+</head>
+
+<body>
 <style type="text/css" media="screen">
+.blue{color:blue;text-decoration:underline;cursor:pointer;}
+
 /* Put your CSS styling here */
+
 </style>
+
+<script src="http://code.jquery.com/jquery-1.9.1.js"></script>
 <script type="text/javascript">
-$(document).ready(function(){
-$("#search").keyup(function(){
-$("#results").html("");
-$.get('../api/indicatorGroups/query/'+$(this).val()+'.json', function(json){
-$(json.indicatorGroups).each(function(i, data){
-var anchor = $("<a></a>").attr("href",
-data.href).append(data.name);
-$("#results").append(anchor).append("<br/>");
-});
-});
-//$("#results").html($(this).val());
-});
-});
-</script>
-<div>
-<label for="search">Search Criteria</label>
-<input type="text" id="search" class="search" />
-<div id="results"></div>
-</div>
+       var theId,id,href,idno,myId,mapId;    
+  var data;
+  var  ChartData={};
+      function reportTableLoad(idno)
+    {
+    
+        $("#reports").html("");
+        $("#reports").append("<h1>REPORTS</h1>");
+    
+      $.get("../../../api/reportTables.json",function(json) 
+                        {
+                        
+                            
+        $(json.reportTables).each(function(i,rept){
+                     var rep=rept.id;
+                  var rephref=rept.href;
+                  
+                $.get(rephref+'.json', function(rep) {
+                    $(rep.reportTable).each(function(i, dat){
+                    var repTabhref= dat.href;
+                    $.get(repTabhref+'.json', function(tab) {
+                        $(tab.indicators).each(function(i, ind){
+                        var    indid=ind.id;
+                        if(indid==idno){
+                            
+                    var anchor = $("<iframe></iframe>").attr("src",rephref+'/data.html').attr("height",780).attr("width",780).append("<br />");                   
+                                     
+                                        
+                                        $("#reports").append(anchor).load();
+                        
+                        
+                        }
+                    });
+                    });
+                    });
+                });
+            
+                
+                 });      
+        
+                
+               
+         
+                        });
+    }   
