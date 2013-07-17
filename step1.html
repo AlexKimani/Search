@@ -1,23 +1,97 @@
 <style type="text/css" media="screen">
-/* Put your CSS styling here */
+    /* Put your CSS styling here */
 </style>
 <script type="text/javascript">
-$(document).ready(function(){
-$("#search").keyup(function(){
-$("#results").html("");
-$.get('../api/indicatorGroups/query/'+$(this).val()+'.json', function(json){
-$(json.indicatorGroups).each(function(i, data){
-var anchor = $("<a></a>").attr("href",
-data.href).append(data.name);
-$("#results").append(anchor).append("<br/>");
-});
-});
-//$("#results").html($(this).val());
-});
-});
+    $(document).ready(function(){
+    $("#search").keyup(function(){
+    $("#results").html("");
+    $.get('../api/indicatorGroups/query/'+$(this).val()+'.json', function(json){
+    $(json.indicatorGroups).each(function(i, data){
+    var anchor = $("<a></a>").attr("href",
+    data.href).append(data.name);
+    $("#results").append(anchor).append("<br/>");
+    });
+    });
+    //$("#results").html($(this).val());
+    });
+    });
+    function reportLoad(idno)
+    {
+
+    $("#reports").html("");
+    $("#reports").append("<h1>REPORTS</h1>");
+
+    $.get("../../../api/reports.json",function(json)
+    {
+
+
+    $(json.reports).each(function(i, data){
+    var rep=data.id;
+    var rephref=data.href;
+
+    $.get(rephref+'.json', function(rep) {
+    $(rep.reportTable).each(function(i, dat){
+    var repTabhref= dat.href;
+    $.get(repTabhref+'.json', function(tab) {
+    $(tab.indicators).each(function(i, ind){
+    var indid=ind.id;
+    if(indid==idno){
+
+    var anchor = $("
+    <iframe></iframe>
+    ").attr("src",rephref+'/data.html').attr("height",780).attr("width",780).append("<br/>");
+
+
+    $("#reports").append(anchor).load();
+
+
+    }
+    });
+    });
+    });
+    });
+
+
+    });
+
+
+    });
+    }
+
+    function printDetails(idno)
+    {
+    $("#maps").html("");
+    $("#maps").append("<h1>MAPS</h1>");
+    $.get("../../../api/mapViews.json",function(map)
+    {
+
+    $(map.mapViews).each(function(i, myData)
+    {
+
+    $.get("../api/mapViews/"+myData.id+".json",function(mapRef)
+    {
+
+    $(mapRef.indicator).each(function(i,mapIndicatorId)
+    {
+
+
+    if(idno==mapIndicatorId.id)
+    {
+    //$("#maps").append("<img src='"+mapRef.href+"/data"'/>);
+    var image=$("<img>").attr("Src",mapRef.href+'/data').append("<br/>");
+    $("#maps").append(image);
+    }
+
+    });
+    });
+    });
+    });
+    }
+
 </script>
 <div>
-<label for="search">Search Criteria</label>
-<input type="text" id="search" class="search" />
-<div id="results"></div>
+    <label for="search">Search Criteria</label>
+    <input type="text" id="search" class="search"/>
+
+    <div id="results"></div>
 </div>
