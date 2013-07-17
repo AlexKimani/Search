@@ -59,7 +59,8 @@
 		  	 
 		 
                         });
-	}   
+	} 
+	//reports
   	function reportLoad(idno)
 	{
 	
@@ -132,7 +133,7 @@
 			});
 		});
 	}
-	
+//to load the charts	
 function chartLoad(idno)
 	{
 		
@@ -193,7 +194,7 @@ function chartLoad(idno)
                                 });
 	   	});
 	}   
-
+	//main function
         $(document).ready(function(){
 			 $("#results").append("<h1>INDICATOR GROUPS</h1>");
                 $.get('../../../api/indicatorGroups/query/'+$(this).val()+'.json', function(json)
@@ -222,6 +223,7 @@ function chartLoad(idno)
                                 {
 									
                                 	theId=data.href;
+                                	
 								       
 									   
                                         var anchor = $("<p class='blue' id='"+theId+"' onclick='javascript:printIt(id)'></p>").append(data.name);
